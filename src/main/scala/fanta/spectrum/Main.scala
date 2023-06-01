@@ -1,19 +1,30 @@
 package fanta.spectrum
 
-import org.ergoplatform.wallet.interface4j.SecretString
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.ergoplatform.wallet.Constants
 import org.ergoplatform.{ErgoAddressEncoder, P2PKAddress}
-import org.ergoplatform.wallet.mnemonic.{Mnemonic, WordList}
-import org.ergoplatform.wallet.mnemonic.Mnemonic.BitsGroupSize
+import org.ergoplatform.wallet.mnemonic.WordList
+import org.ergoplatform.wallet.mnemonic.Mnemonic._
 import org.ergoplatform.wallet.secrets.DerivationPath
 import org.ergoplatform.wallet.secrets.ExtendedSecretKey.deriveMasterKey
 import scodec.bits.BitVector
 
+import java.security.Security
+import java.text.Normalizer.Form.NFKD
+import java.text.Normalizer.normalize
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 import scala.collection.parallel.immutable.ParRange
 import scala.collection.parallel.mutable.ParArray
 
 object Main {
 
   private val path = DerivationPath.fromEncoded("m/44'/429'/0'/0/0").get
+
+  private val skf: SecretKeyFactory = {
+    Security.addProvider(new BouncyCastleProvider())
+    SecretKeyFactory.getInstance(Pbkdf2Algorithm, BouncyCastleProvider.PROVIDER_NAME)
+  }
 
   def main(args: Array[String]): Unit = {
 
@@ -32,7 +43,7 @@ object Main {
 
     do {
       hits = ParRange(0, size, 1, inclusive = false)
-        .map(randomAddress).toParArray.filter(_._2.toLowerCase.endsWith(target))
+        .map(_ => randomAddress()).toParArray.filter(_._2.toLowerCase.endsWith(target))
       i += 1
       println(s"Checked ${i * size} addresses...")
     }while(hits.isEmpty)
@@ -48,11 +59,11 @@ object Main {
 
   }
 
-  private def randomAddress(i: Int): (String,String) = {
+  private def randomAddress(): (String,String) = {
     val mnemonic = newMnemonic()
     val addr = ErgoAddressEncoder.Mainnet.toString(
       P2PKAddress(
-        deriveMasterKey(Mnemonic.toSeed(SecretString.create(mnemonic)), usePre1627KeyDerivation = false).derive(path).publicImage
+        deriveMasterKey(toSeed(mnemonic), usePre1627KeyDerivation = false).derive(path).publicImage
       )(ErgoAddressEncoder.Mainnet)
     )
     mnemonic -> addr
@@ -61,12 +72,22 @@ object Main {
   private val wordList = WordList.load("english").get
 
   private def newMnemonic(): String = {
-    val entropy = scorex.utils.Random.randomBytes(256 / 8)
+    val entropy = scorex.utils.Random.randomBytes(128 / 8)
     val checksum = BitVector(scorex.crypto.hash.Sha256.hash(entropy))
     val entropyWithChecksum = BitVector(entropy) ++ checksum.take(entropy.length / 4)
     entropyWithChecksum.grouped(BitsGroupSize).map { wordIndex =>
       wordList.words(wordIndex.toInt(signed = false))
     }.mkString(wordList.delimiter)
   }
+
+  private def toSeed(mnemonic: String): Array[Byte] =
+    skf.generateSecret(
+      new PBEKeySpec(
+        normalize(mnemonic, NFKD).toCharArray,
+        normalize("mnemonic", NFKD).getBytes(Constants.Encoding),
+        Pbkdf2Iterations,
+        Pbkdf2KeyLength
+      )
+    ).getEncoded
 
 }
