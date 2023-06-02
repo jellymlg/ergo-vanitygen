@@ -1,7 +1,18 @@
 <h1>Ergo fancy address</h1>
 
-Usage: `java -jar ergo-fancy-address-1.0.0.jar hello`
+Usage:
 <br>
-This example will try finding an address that ends with "hello" (case insensitive)
+`java -jar ergo-fancy-address-<X.Y.Z>.jar <mode> <string>`
+<br>
+`mode: "-start" or "-end"`
+<br>
+`string: the value to look for in addresses")`
+<br>
 
-WARNING: The operation of randomly guessing seeds can be demanding for the CPU, finding a 5 letter ending already takes ~2.4M guesses!
+Example:
+<br>
+`java -jar ergo-fancy-address-1.0.0.jar -end hello`
+<br>
+This example will try finding an address that ends with "hello" (case-insensitive)
+
+<b>WARNING</b>: Randomly guessing seeds is demanding for the CPU: finding a 5 letter value can take millions of guesses!
