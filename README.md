@@ -1,8 +1,8 @@
-<h1>Ergo fancy address</h1>
+<h1>Ergo vanitygen</h1>
 
 Usage:
 <br>
-`java -jar ergo-fancy-address-<X.Y.Z>.jar <mode> <string>`
+`java -jar ergo-vanitygen-<X.Y>.jar <mode> <string>`
 <br>
 `mode: "-start" or "-end"`
 <br>
@@ -11,7 +11,7 @@ Usage:
 
 Example:
 <br>
-`java -jar ergo-fancy-address-1.0.0.jar -end hello`
+`java -jar ergo-vanitygen-1.0.jar -end hello`
 <br>
 This example will try finding an address that ends with "hello" (case-insensitive)
 

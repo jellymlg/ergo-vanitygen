@@ -1,4 +1,4 @@
-package fanta.spectrum
+package fanta.vanitygen
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.ergoplatform.wallet.Constants
