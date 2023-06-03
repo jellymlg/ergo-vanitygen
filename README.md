@@ -6,7 +6,7 @@ Usage:
 <br>
 `mode: "-start" or "-end"`
 <br>
-`string: the value to look for in addresses")`
+`string: the value to look for in addresses`
 <br>
 
 Example:
