@@ -11,7 +11,7 @@ Usage: java -jar ergo-vanitygen-VERSION.jar [options]
 
 Example:
 <br>
-`java -jar ergo-vanitygen-1.0.jar -e -p heLLo -m`
+`java -jar ergo-vanitygen-1.1.jar -e -p heLLo -m`
 <br>
 This example will try finding an address that ends exactly with "heLLo" (case-sensitive)
 
