@@ -11,7 +11,8 @@ val sonatypeSnapshots = "Sonatype Snapshots" at "https://oss.sonatype.org/conten
 resolvers ++= Seq(Resolver.mavenLocal, sonatypeReleases, sonatypeSnapshots, Resolver.mavenCentral)
 libraryDependencies ++= Seq(
   "org.scorexfoundation" %% "sigma-state" % "5.0.5",
-  "org.ergoplatform" %% "ergo-wallet" % "5.0.7"
+  "org.ergoplatform" %% "ergo-wallet" % "5.0.7",
+  "com.github.scopt" %% "scopt" % "4.1.0"
 )
 
 Compile / compile / scalacOptions ++= Seq("-release", "8")
