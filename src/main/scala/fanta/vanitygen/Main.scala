@@ -34,8 +34,8 @@ object Main {
     hits.toArray.zipWithIndex.foreach { case ((seed, addr), i) =>
       println("---------------------------")
       println(s"Match ${i + 1}")
-      println(s"Seed phrase is: $seed")
-      println(s"Address is: $addr")
+      println(s"Seed phrase: $seed")
+      println(s"Address: $addr")
       println("---------------------------")
     }
 

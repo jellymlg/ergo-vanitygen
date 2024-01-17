@@ -1,4 +1,4 @@
-ThisBuild / version := "1.0"
+ThisBuild / version := "1.1"
 
 lazy val root = (project in file(".")).settings(name := "ergo-vanitygen")
 
